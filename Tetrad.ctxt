@@ -1,0 +1,14 @@
+#BlueJ class context
+comment0.params=grid
+comment0.target=Tetrad(BoundedGrid)
+comment1.params=grid\ locs
+comment1.target=void\ addToLocations(BoundedGrid,\ Location[])
+comment2.params=
+comment2.target=Location[]\ removeBlocks()
+comment3.params=grid\ locs
+comment3.target=boolean\ areEmpty(BoundedGrid,\ Location[])
+comment4.params=deltaRow\ deltaCol
+comment4.target=boolean\ translate(int,\ int)
+comment5.params=
+comment5.target=boolean\ rotate()
+numComments=6

@@ -1,0 +1,23 @@
+#BlueJ class context
+comment0.params=board
+comment0.target=BlockDisplay(BoundedGrid)
+comment1.params=
+comment1.target=void\ run()
+comment2.params=
+comment2.target=void\ createAndShowGUI()
+comment2.text=\n\ Create\ the\ GUI\ and\ show\ it.\ \ For\ thread\ safety,\n\ this\ method\ should\ be\ invoked\ from\ the\n\ event-dispatching\ thread.\n
+comment3.params=
+comment3.target=void\ visible()
+comment4.params=
+comment4.target=void\ showBlocks()
+comment5.params=title
+comment5.target=void\ setTitle(java.lang.String)
+comment6.params=e
+comment6.target=void\ keyTyped(java.awt.event.KeyEvent)
+comment7.params=e
+comment7.target=void\ keyReleased(java.awt.event.KeyEvent)
+comment8.params=e
+comment8.target=void\ keyPressed(java.awt.event.KeyEvent)
+comment9.params=listener
+comment9.target=void\ setArrowListener(ArrowListener)
+numComments=10
