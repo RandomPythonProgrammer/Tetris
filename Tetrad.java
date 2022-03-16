@@ -195,6 +195,23 @@ public class Tetrad
         //              check if the new locations are empty
         //              replace the tetrad in the proper place (rotated)
 
-        throw new RuntimeException("Insert Exercise 3.0 code here");    // replace this line
+        int row0 = blocks[0].getLocation().getRow();
+        int col0 = blocks[0].getLocation().getCol();
+
+        Location[] locs = removeBlocks();
+        for (Location loc : locs) {
+            loc = new Location(row0 - loc.getCol(), row0 + col0 - loc.getRow());
+        }
+        if (areEmpty(grid, locs)) {
+            addToLocations(grid, locs);
+            return true;
+        } else {
+            for (Location loc : locs) {
+
+            }
+            addToLocations(grid, locs);
+            return false;
+        }
+// replace this line
     }
 }
