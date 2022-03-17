@@ -51,9 +51,9 @@ public class Block
         //First, using the grid object, call the remove method (pass it this location)
         //Second, set this location to null
         //Third, set this grid to null
-        grid.remove(location);
-        location = null;
-        grid = null;
+        this.grid.remove(this.location);
+        this.location = null;
+        this.grid = null;
         // replace this line
     }
 

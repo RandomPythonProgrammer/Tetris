@@ -6,6 +6,8 @@
  */
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Tetrad
 {
@@ -42,8 +44,8 @@ public class Tetrad
             case 0:
                 color = Color.RED;
                 locs = new Location[]{
-                        new Location(0, 0),
                         new Location(1, 0),
+                        new Location(0, 0),
                         new Location(2, 0),
                         new Location(3, 0)
                 };
@@ -51,26 +53,26 @@ public class Tetrad
             case 1:
                 color = Color.GRAY;
                 locs = new Location[]{
-                        new Location(1, 0),
-                        new Location(1, 1),
-                        new Location(1, 2),
-                        new Location(2, 1)
+                        new Location(0, 1),
+                        new Location(0, 0),
+                        new Location(0, 2),
+                        new Location(1, 1)
                 };
                 break;
             case 2:
                 color = Color.CYAN;
                 locs = new Location[]{
+                        new Location(0, 1),
+                        new Location(0, 0),
                         new Location(1, 0),
-                        new Location(1, 1),
-                        new Location(2, 0),
-                        new Location(2, 1)
+                        new Location(1, 1)
                 };
                 break;
             case 3:
                 color = Color.YELLOW;
                 locs = new Location[]{
-                        new Location(0, 0),
                         new Location(1, 0),
+                        new Location(0, 0),
                         new Location(2, 0),
                         new Location(2, 1)
                 };
@@ -78,28 +80,28 @@ public class Tetrad
             case 4:
                 color = Color.MAGENTA;
                 locs = new Location[]{
+                        new Location(2, 1),
                         new Location(0, 1),
                         new Location(1, 1),
-                        new Location(2, 1),
                         new Location(2, 0)
                 };
                 break;
             case 5:
                 color = Color.BLUE;
                 locs = new Location[]{
-                        new Location(1, 2),
-                        new Location(1, 3),
-                        new Location(2, 0),
-                        new Location(2, 1)
+                        new Location(0, 2),
+                        new Location(0, 1),
+                        new Location(1, 0),
+                        new Location(1, 1)
                 };
                 break;
             case 6:
                 color = Color.GREEN;
                 locs = new Location[]{
-                        new Location(1, 0),
+                        new Location(0, 1),
+                        new Location(0, 0),
                         new Location(1, 1),
-                        new Location(2, 1),
-                        new Location(2, 2)
+                        new Location(1, 2)
                 };
                 break;
         }
@@ -120,7 +122,7 @@ public class Tetrad
     private void addToLocations(BoundedGrid<Block> grid, Location[] locs)
     {
         for (int i = 0; i < locs.length; i++){
-            grid.put(locs[i], blocks[i]);
+            blocks[i].putSelfInGrid(grid, locs[i]);
         }
     }
 
@@ -166,16 +168,14 @@ public class Tetrad
         //              replace the tetrad in the proper place (translated)
         //              return true if moved, false if not moved
         Location[] locs = removeBlocks();
-        for (Location loc : locs) {
-            loc = new Location(loc.getRow() + deltaRow, loc.getCol() + deltaCol);
+        Location[] newLocs = new Location[blocks.length];
+        for (int i = 0; i<newLocs.length; i++) {
+            newLocs[i] = new Location(locs[i].getRow() + deltaRow, locs[i].getCol() + deltaCol);
         }
-        if (areEmpty(grid, locs)) {
-            addToLocations(grid, locs);
+        if (areEmpty(grid, newLocs)) {
+            addToLocations(grid, newLocs);
             return true;
         } else {
-            for (Location loc : locs) {
-                loc = new Location(loc.getRow() - deltaRow, loc.getCol() - deltaCol);
-            }
             addToLocations(grid, locs);
             return false;
         }
@@ -198,18 +198,16 @@ public class Tetrad
         int row0 = blocks[0].getLocation().getRow();
         int col0 = blocks[0].getLocation().getCol();
 
-        Location[] locs = removeBlocks();
-        for (Location loc : locs) {
-            loc = new Location(row0 - loc.getCol(), row0 + col0 - loc.getRow());
+        Location[] old_locs = removeBlocks();
+        Location[] locs = old_locs.clone();
+        for (int i = 0; i < locs.length; i ++) {
+             locs[i] = new Location(row0 - col0 + locs[i].getCol(), row0 + col0 - locs[i].getRow());
         }
         if (areEmpty(grid, locs)) {
             addToLocations(grid, locs);
             return true;
         } else {
-            for (Location loc : locs) {
-
-            }
-            addToLocations(grid, locs);
+            addToLocations(grid, old_locs);
             return false;
         }
 // replace this line
