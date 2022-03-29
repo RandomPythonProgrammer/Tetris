@@ -1,13 +1,20 @@
+import javax.sound.sampled.*;
+import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
+
 /**
  * Tetris class to be completed for Tetris project
  * 
  * @author (your name) 
  * @version (a version number or a date)
  */
+
 public class Tetris implements ArrowListener
 {
-    private double speed;
     private double score;
+    private int frame;
+
     public static void main(String[] args)
     {
         Tetris tetris = new Tetris();
@@ -18,14 +25,23 @@ public class Tetris implements ArrowListener
     private BlockDisplay display;
     private Tetrad activeTetrad;
 
-    public Tetris()
-    {
+    public Tetris() {
         grid = new BoundedGrid<Block>(20, 10);
         display = new BlockDisplay(grid);
         display.setTitle("Tetris");
         display.setArrowListener(this);
         activeTetrad = new Tetrad(grid);
-        speed = 1000;
+        frame = 0;
+        File file = new File("theme.wav");
+        try {
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(file.toURI().toURL());
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioInputStream);
+            clip.loop(-1);
+            clip.start();
+        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
+            e.printStackTrace();
+        }
     }
 
     public void upPressed()
@@ -57,19 +73,24 @@ public class Tetris implements ArrowListener
     {
         while (true)
         {
-            try { Thread.sleep(Math.round(speed)); } catch(Exception e) {}
+            try { Thread.sleep(25); } catch(Exception e) {}
 
             //Insert Exercise 3.2 code here
-            if (!activeTetrad.translate(1, 0)){
-                activeTetrad = new Tetrad(grid);
-                int rows = clearCompletedRows();
-                score += Math.pow(rows, 1.5) * 100;
-                if (!topRowsEmpty()){
-                    display.setTitle(String.valueOf((int)score));
-                }
+            if (frame >= 50-Math.pow(score, 0.05)) {
+                    if (!activeTetrad.translate(1, 0)) {
+                        int rows = clearCompletedRows();
+                        score += Math.pow(rows, 1.5) * 100;
+                        score += 10;
+                        display.setTitle(String.format("Your Score: %d", Math.round(score)));
+                        if (!topRowsEmpty()) {
+                            display.setTitle(String.valueOf((int) score));
+                        }
+                        activeTetrad = new Tetrad(grid);
+                    }
+                frame = 0;
             }
             //Insert Exercise 3.3 code here
-
+            frame++;
             display.showBlocks();
         }
     }
@@ -95,13 +116,17 @@ public class Tetris implements ArrowListener
     //               has been moved down one row.
     private void clearRow(int row)
     {
-        for (int i = 0; i < row; i++){
-            for (int j = 0; j < grid.getNumCols(); j++){
-                grid.get(new Location(i, j)).moveTo(new Location(i+1, j));
-            }
-        }
         for (int i = 0; i < grid.getNumCols(); i++){
             grid.remove(new Location(row, i));
+        }
+        for (int i = row - 1; i >= 0; i--){
+            for (int j = 0; j < grid.getNumCols(); j++){
+                try {
+                    grid.get(new Location(i, j)).moveTo(new Location(i+1, j));
+                } catch (NullPointerException ignored){
+
+                }
+            }
         }
     }
 

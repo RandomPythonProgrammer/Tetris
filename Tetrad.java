@@ -89,8 +89,8 @@ public class Tetrad
             case 5:
                 color = Color.BLUE;
                 locs = new Location[]{
-                        new Location(0, 2),
                         new Location(0, 1),
+                        new Location(0, 2),
                         new Location(1, 0),
                         new Location(1, 1)
                 };
